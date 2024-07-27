@@ -1,6 +1,8 @@
 package org.javaacadmey.wonder_field;
 
 import java.util.Scanner;
+import org.javaacadmey.wonder_field.drum.Drum;
+import org.javaacadmey.wonder_field.drum.DrumOptionsAdd;
 import org.javaacadmey.wonder_field.player.Player;
 import org.javaacadmey.wonder_field.player.PlayerAnswer;
 
@@ -17,6 +19,7 @@ public class Game {
   private final Player[] winners;
   private final Yakubovich yakubovich;
   private Tableau tableau;
+  private final Drum drum;
 
   public Game() {
     COUNT_PLAYERS = 3;
@@ -27,6 +30,7 @@ public class Game {
     answers = new String[COUNT_ROUNDS];
     winners = new Player[COUNT_GROUP_ROUNDS];
     yakubovich = new Yakubovich();
+    drum = new Drum();
   }
 
 //  public void init() {
@@ -75,11 +79,25 @@ public class Game {
 
   public boolean moveOfPlayer(Player player) {
     PlayerAnswer move;
+    String rotationDrum;
     while (true) {
+      System.out.printf("Ход игрока %s, %s\n", player.getName(), player.getCity());
+      yakubovich.speakRotationDrum(player.getName());
+      rotationDrum = drum.rotation();
+      if (rotationDrum.equals(DrumOptionsAdd.SKIPPING_MOVE.toString())) {
+        yakubovich.skippingMoveSector();
+        return false;
+      }
+      if (rotationDrum.equals(DrumOptionsAdd.MULTIPLICATION_TWO.toString())) {
+        yakubovich.multiplicationSector(player);
+      } else {
+        yakubovich.scoreSector(rotationDrum);
+      }
       move = player.move();
       switch (move.getTypeResponse()) {
         case LETTER -> {
           if (yakubovich.isCheckResponsePlayer(move, tableau)) {
+            player.setScore(rotationDrum);
             if (isTableauCompletelyFilled()) {
               return true;
             }
@@ -88,7 +106,11 @@ public class Game {
           }
         }
         case WORD -> {
-          return yakubovich.isCheckResponsePlayer(move, tableau);
+          if (yakubovich.isCheckResponsePlayer(move, tableau)) {
+            player.setScore(rotationDrum);
+            return true;
+          }
+          return false;
         }
       }
     }

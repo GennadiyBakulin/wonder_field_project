@@ -2,19 +2,21 @@ package org.javaacadmey.wonder_field.player;
 
 import java.util.regex.Pattern;
 import org.javaacadmey.wonder_field.Game;
+import org.javaacadmey.wonder_field.drum.DrumOptionsAdd;
 
 public class Player {
 
   private final String name;
   private final String city;
+  private int score;
 
   public Player(String name, String city) {
     this.name = name;
     this.city = city;
+    this.score = 0;
   }
 
   public PlayerAnswer move() {
-    System.out.printf("Ход игрока %s, %s\n", name, city);
     System.out.println(
         "Если хотите букву нажмите 'б' и enter, если хотите слово нажмите 'c' и enter");
     String input = Game.scanner.nextLine();
@@ -53,5 +55,17 @@ public class Player {
 
   public String getCity() {
     return city;
+  }
+
+  public int getScore() {
+    return score;
+  }
+
+  public void setScore(String rotation) {
+    if (rotation.equals(DrumOptionsAdd.MULTIPLICATION_TWO.toString())) {
+      score *= 2;
+    } else {
+      score += Integer.parseInt(rotation);
+    }
   }
 }

@@ -32,10 +32,16 @@ public class Yakubovich {
     if (isFinallyRound) {
       System.out.printf("Якубович: И перед нами победитель Капитал шоу поле чудес! Это %s из %s\n",
           player.getName(), player.getCity());
+      showScore(player);
     } else {
       System.out.printf("Якубович: Молодец! %s из %s проходит в финал!\n", player.getName(),
           player.getCity());
+      showScore(player);
     }
+  }
+
+  private void showScore(Player player) {
+    System.out.printf("У Вас набрано %d очков!\n", player.getScore());
   }
 
   public boolean isCheckResponsePlayer(PlayerAnswer answerPlayer, Tableau tableau) {
@@ -48,7 +54,7 @@ public class Yakubovich {
           System.out.println("__________________________________");
           return true;
         } else {
-          System.out.println("Якубович: Нет такой буквы! Следующий игрок, крутите барабан!");
+          System.out.println("Якубович: Нет такой буквы! Следующий игрок!");
         }
       }
       case WORD -> {
@@ -63,6 +69,7 @@ public class Yakubovich {
       }
     }
     System.out.println("__________________________________");
+    tableau.displayLettersOnTableau();
     return false;
   }
 
@@ -76,5 +83,23 @@ public class Yakubovich {
 
   public String connectingLinesWithCommas(String[] names) {
     return String.join(", ", names);
+  }
+
+  public void speakRotationDrum(String name) {
+    System.out.printf("Якубович: %s вращайте барабан!\n", name);
+  }
+
+  public void skippingMoveSector() {
+    System.out.println("Якубович: на барабане сектор Пропуска хода! Следующий игрок!\n");
+  }
+
+  public void multiplicationSector(Player player) {
+    System.out.printf("Якубович: на барабане сектор умножения очков на 2!\n"
+            + "Якубович: у Вас %d очков в случае успешного ответа ваши очки удвоятся!\n",
+        player.getScore());
+  }
+
+  public void scoreSector(String score) {
+    System.out.printf("Якубович: на барабане %s очков! Ваш ответ!\n", score);
   }
 }
