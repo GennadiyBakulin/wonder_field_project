@@ -2,22 +2,19 @@ package org.javaacadmey.wonder_field.player;
 
 public class PlayerAnswer {
 
-  private TypeResponse typeResponse;
-  private String response;
+  private final TypeResponse typeResponse;
+  private final String response;
+
+  public PlayerAnswer(TypeResponse typeResponse, String response) {
+    this.typeResponse = typeResponse;
+    this.response = response;
+  }
 
   public TypeResponse getTypeResponse() {
     return typeResponse;
   }
 
-  public void setTypeResponse(TypeResponse typeResponse) {
-    this.typeResponse = typeResponse;
-  }
-
   public String getResponse() {
     return response;
-  }
-
-  public void setResponse(String response) {
-    this.response = response;
   }
 }

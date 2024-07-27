@@ -5,7 +5,7 @@ public class Tableau {
   private String rightAnswer;
   private boolean[] isOpenLettersOnTableau;
 
-  public void init(String rightAnswer) {
+  public Tableau(String rightAnswer) {
     this.rightAnswer = rightAnswer;
     isOpenLettersOnTableau = new boolean[rightAnswer.length()];
   }
@@ -23,15 +23,15 @@ public class Tableau {
     }
   }
 
-  public void openLetter(char letter) {
+  public void openLetter(String letter) {
     if (isNotEmptyAttributes()) {
       for (int i = 0; i < rightAnswer.length(); i++) {
-        if (rightAnswer.charAt(i) == letter) {
+        if (String.valueOf(rightAnswer.charAt(i)).equalsIgnoreCase(letter)) {
           isOpenLettersOnTableau[i] = true;
         }
       }
+      displayLettersOnTableau();
     }
-    displayLettersOnTableau();
   }
 
   public void openFullWord() {
@@ -51,7 +51,11 @@ public class Tableau {
   }
 
   public boolean isNotEmptyAttributes() {
-    return !(rightAnswer == null || isOpenLettersOnTableau == null || rightAnswer.isEmpty()
-        || isOpenLettersOnTableau.length == 0);
+    return rightAnswer != null && isOpenLettersOnTableau != null && !rightAnswer.isBlank()
+        && isOpenLettersOnTableau.length != 0;
+  }
+
+  public String getRightAnswer() {
+    return rightAnswer;
   }
 }
