@@ -10,10 +10,10 @@ public class Game {
 
   public static Scanner scanner = new Scanner(System.in);
 
-  private final int COUNT_PLAYERS;
-  private final int COUNT_ROUNDS;
-  private final int COUNT_GROUP_ROUNDS;
-  private final int INDEX_FINAL_ROUND;
+  public static final int COUNT_PLAYERS = 3;
+  public static final int COUNT_ROUNDS = 4;
+  public static final int COUNT_GROUP_ROUNDS = 3;
+  public static final int INDEX_FINAL_ROUND = 3;
   private final String[] questions;
   private final String[] answers;
   private final Player[] winners;
@@ -22,10 +22,6 @@ public class Game {
   private final Drum drum;
 
   public Game() {
-    COUNT_PLAYERS = 3;
-    COUNT_ROUNDS = 4;
-    COUNT_GROUP_ROUNDS = 3;
-    INDEX_FINAL_ROUND = 3;
     questions = new String[COUNT_ROUNDS];
     answers = new String[COUNT_ROUNDS];
     winners = new Player[COUNT_GROUP_ROUNDS];
@@ -126,10 +122,10 @@ public class Game {
     int numberBox;
     yakubovich.shoutPlayingWithBoxes(player.getName(), box);
     while (!(scanner.hasNextInt() && (numberBox = scanner.nextInt()) >= 1
-        && numberBox <= box.getCOUNT_BOX())) {
+        && numberBox <= Box.COUNT_BOX)) {
       scanner.nextLine();
       System.out.printf("Не верный ввод! Введите число от 1 до %d и нажмите Enter\n",
-          box.getCOUNT_BOX());
+          Box.COUNT_BOX);
     }
     return yakubovich.checkBox(numberBox, box);
   }

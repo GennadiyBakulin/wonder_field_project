@@ -108,7 +108,7 @@ public class Yakubovich {
         "Якубович: Поздравляю %s Вы отгадали три буквы подряд и можете выиграть денежный приз в шкатулках!\n"
             + "Якубович: Шкатулки в студию!\n"
             + "Якубович: Выберите номер шкатулки от 1 до %d и нажмите Enter\n", name,
-        box.getCOUNT_BOX());
+        Box.COUNT_BOX);
   }
 
   public int checkBox(int numberBox, Box box) {

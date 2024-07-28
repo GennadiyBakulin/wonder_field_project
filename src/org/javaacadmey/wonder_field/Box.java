@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Box {
 
-  private final int COUNT_BOX = 2;
+  public static final int COUNT_BOX = 2;
   private final int numberMoneyBox;
   private final int amountPrize;
 
@@ -20,9 +20,5 @@ public class Box {
 
   public int getAmountPrize() {
     return amountPrize;
-  }
-
-  public int getCOUNT_BOX() {
-    return COUNT_BOX;
   }
 }
