@@ -32,11 +32,9 @@ public class Yakubovich {
     if (isFinallyRound) {
       System.out.printf("Якубович: И перед нами победитель Капитал шоу поле чудес! Это %s из %s\n",
           player.getName(), player.getCity());
-      showScore(player);
     } else {
       System.out.printf("Якубович: Молодец! %s из %s проходит в финал!\n", player.getName(),
           player.getCity());
-      showScore(player);
     }
   }
 
@@ -120,5 +118,25 @@ public class Yakubovich {
       System.out.println("Якубович: Увы вы не отгадали шкатулку");
       return 0;
     }
+  }
+
+  public void speakCountScore(Player finalist) {
+    System.out.printf("Якубович: %s Вы набрали %d очков\n", finalist.getName(),
+        finalist.getScore());
+  }
+
+  public boolean offersPlaySuperGame(Player finalist) {
+    String answer;
+    System.out.printf("Якубович: %s хотите сыграть в Супер Игру?\n", finalist.getName());
+    System.out.println("Если согласны сыграть в Супер Игру введите \"да\" и нажмите Enter,"
+        + " если не согласны введите \"нет\" и нажмите Enter.");
+
+    while (!((answer = Game.scanner.nextLine()).equalsIgnoreCase("да")
+        || answer.equalsIgnoreCase("нет"))) {
+      System.out.println("Не верный ввод, повторите заново!");
+      System.out.println("Если согласны сыграть в Супер Игру введите \"да\" и нажмите Enter,"
+          + " если не согласны введите \"нет\" и нажмите Enter.");
+    }
+    return answer.equalsIgnoreCase("да");
   }
 }

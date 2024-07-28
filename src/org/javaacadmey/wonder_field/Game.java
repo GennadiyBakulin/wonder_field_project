@@ -14,12 +14,15 @@ public class Game {
   public static final int COUNT_ROUNDS = 4;
   public static final int COUNT_GROUP_ROUNDS = 3;
   public static final int INDEX_FINAL_ROUND = 3;
+  public static final int INDEX_SUPER_GAME = 4;
   private final String[] questions;
   private final String[] answers;
   private final Player[] winners;
   private final Yakubovich yakubovich;
   private Tableau tableau;
   private final Drum drum;
+  private Player finalist;
+  private String[][] listPrize;
 
   public Game() {
     questions = new String[COUNT_ROUNDS];
@@ -27,6 +30,15 @@ public class Game {
     winners = new Player[COUNT_GROUP_ROUNDS];
     yakubovich = new Yakubovich();
     drum = new Drum();
+    listPrize = new String[][]{
+        {"Холодильник", "1000"},
+        {"Утюг", "300"},
+        {"Телевизор", "1200"},
+        {"Стиральная машина", "1000"},
+        {"Блендер", "400"},
+        {"Чайник", "100"},
+        {"Микроволновая печь", "500"}
+    };
   }
 
 //  public void init() {
@@ -38,6 +50,10 @@ public class Game {
 //      System.out.printf("Введите ответ на вопрос #%d\n", i + 1);
 //      answers[i] = scanner.nextLine();
 //    }
+  //   System.out.println("Введите супервопрос");
+  // questions[INDEX_SUPER_GAME] = scanner.nextLine();
+  //      System.out.prinln("Введите ответ на супервопрос");
+//      answers[INDEX_SUPER_GAME] = scanner.nextLine();
 //    System.out.println("Иницализация закончена, игра начнется через 5 секунд");
 //    try {
 //      Thread.sleep(5000);
@@ -53,10 +69,12 @@ public class Game {
     questions[1] = "Вопрос 2";
     questions[2] = "Вопрос 3";
     questions[3] = "Вопрос 4";
+    questions[4] = "Вопрос Суперигры";
     answers[0] = "кошка";
     answers[1] = "собака";
     answers[2] = "елка";
     answers[3] = "зверь";
+    answers[4] = "казначей";
   }
 
   public Player[] createPlayers() {
@@ -140,6 +158,7 @@ public class Game {
             winners[numberRound - 1] = player;
           } else {
             yakubovich.shoutIfPlayerWins(player, true);
+            finalist = player;
           }
           isEndOfRound = true;
           break;
@@ -171,10 +190,25 @@ public class Game {
     playRound(winners, INDEX_FINAL_ROUND + 1);
   }
 
+  private void playSuperGame() {
+    selectPrize(finalist);
+    if (yakubovich.offersPlaySuperGame(finalist)) {
+
+    } else {
+
+    }
+  }
+
+  private void selectPrize(Player finalist) {
+    yakubovich.speakCountScore(finalist);
+
+  }
+
   public void start() {
     yakubovich.start();
     playGroupRounds();
     playFinalRound();
+    playSuperGame();
     yakubovich.end();
   }
 }
