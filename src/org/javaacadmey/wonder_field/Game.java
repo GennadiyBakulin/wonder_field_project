@@ -80,6 +80,7 @@ public class Game {
   public boolean moveOfPlayer(Player player) {
     PlayerAnswer move;
     String rotationDrum;
+    int counterForGuessingThreeLettersInRow = 0;
     while (true) {
       System.out.printf("Ход игрока %s, %s\n", player.getName(), player.getCity());
       yakubovich.speakRotationDrum(player.getName());
@@ -98,6 +99,10 @@ public class Game {
         case LETTER -> {
           if (yakubovich.isCheckResponsePlayer(move, tableau)) {
             player.setScore(rotationDrum);
+            if (++counterForGuessingThreeLettersInRow == 3) {
+              player.setAmountWinningsBoxes(playingWithBoxes(player));
+              counterForGuessingThreeLettersInRow = 0;
+            }
             if (isTableauCompletelyFilled()) {
               return true;
             }
@@ -114,6 +119,19 @@ public class Game {
         }
       }
     }
+  }
+
+  private int playingWithBoxes(Player player) {
+    Box box = new Box();
+    int numberBox;
+    yakubovich.shoutPlayingWithBoxes(player.getName(), box);
+    while (!(scanner.hasNextInt() && (numberBox = scanner.nextInt()) >= 1
+        && numberBox <= box.getCOUNT_BOX())) {
+      scanner.nextLine();
+      System.out.printf("Не верный ввод! Введите число от 1 до %d и нажмите Enter\n",
+          box.getCOUNT_BOX());
+    }
+    return yakubovich.checkBox(numberBox, box);
   }
 
   public void playRound(Player[] players, int numberRound) {

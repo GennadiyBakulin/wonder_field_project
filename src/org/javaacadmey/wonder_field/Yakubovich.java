@@ -102,4 +102,23 @@ public class Yakubovich {
   public void scoreSector(String score) {
     System.out.printf("Якубович: на барабане %s очков! Ваш ответ!\n", score);
   }
+
+  public void shoutPlayingWithBoxes(String name, Box box) {
+    System.out.printf(
+        "Якубович: Поздравляю %s Вы отгадали три буквы подряд и можете выиграть денежный приз в шкатулках!\n"
+            + "Якубович: Шкатулки в студию!\n"
+            + "Якубович: Выберите номер шкатулки от 1 до %d и нажмите Enter\n", name,
+        box.getCOUNT_BOX());
+  }
+
+  public int checkBox(int numberBox, Box box) {
+    if (numberBox == box.getNumberMoneyBox()) {
+      System.out.printf("Якубович: Поздравляю Вы верно выбрали шкатулку, ваш выигрыш составил %d\n",
+          box.getAmountPrize());
+      return box.getAmountPrize();
+    } else {
+      System.out.println("Якубович: Увы вы не отгадали шкатулку");
+      return 0;
+    }
+  }
 }

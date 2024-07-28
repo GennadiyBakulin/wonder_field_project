@@ -9,11 +9,13 @@ public class Player {
   private final String name;
   private final String city;
   private int score;
+  private int amountWinningsBoxes;
 
   public Player(String name, String city) {
     this.name = name;
     this.city = city;
     this.score = 0;
+    this.amountWinningsBoxes = 0;
   }
 
   public PlayerAnswer move() {
@@ -67,5 +69,13 @@ public class Player {
     } else {
       score += Integer.parseInt(rotation);
     }
+  }
+
+  public int getAmountWinningsBoxes() {
+    return amountWinningsBoxes;
+  }
+
+  public void setAmountWinningsBoxes(int amountWinningsBoxes) {
+    this.amountWinningsBoxes += amountWinningsBoxes;
   }
 }
