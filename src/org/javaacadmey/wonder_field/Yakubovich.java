@@ -11,16 +11,16 @@ public class Yakubovich {
   }
 
   public void end() {
-    System.out.println("Мы прощаемся с вами ровно на одну неделю! Здоровья вам, до встречи!");
+    System.out.println("Мы прощаемся с вами ровно на одну неделю! Здоровья вам, и до встречи!");
   }
 
   public void welcomeThreePlayers(Player[] players, int roundNumber) {
     if (roundNumber < 4) {
       System.out.printf("Якубович: приглашаю %d тройку игроков: %s\n", roundNumber,
-          connectingLinesWithCommas(nameOfPlayers(players)));
+          connectLinesWithCommas(nameOfPlayers(players)));
     } else {
       System.out.printf("Якубович: приглашаю победителей групповых этапов: %s\n",
-          connectingLinesWithCommas(nameOfPlayers(players)));
+          connectLinesWithCommas(nameOfPlayers(players)));
     }
   }
 
@@ -36,10 +36,6 @@ public class Yakubovich {
       System.out.printf("Якубович: Молодец! %s из %s проходит в финал!\n", player.getName(),
           player.getCity());
     }
-  }
-
-  private void showScore(Player player) {
-    System.out.printf("У Вас набрано %d очков!\n", player.getScore());
   }
 
   public boolean isCheckResponsePlayer(PlayerAnswer answerPlayer, Tableau tableau) {
@@ -79,8 +75,8 @@ public class Yakubovich {
     return nameOfPlayers;
   }
 
-  public String connectingLinesWithCommas(String[] names) {
-    return String.join(", ", names);
+  public String connectLinesWithCommas(String[] array) {
+    return String.join(", ", array);
   }
 
   public void speakRotationDrum(String name) {
@@ -101,7 +97,7 @@ public class Yakubovich {
     System.out.printf("Якубович: на барабане %s очков! Ваш ответ!\n", score);
   }
 
-  public void shoutPlayingWithBoxes(String name, Box box) {
+  public void shoutPlayingWithBoxes(String name) {
     System.out.printf(
         "Якубович: Поздравляю %s Вы отгадали три буквы подряд и можете выиграть денежный приз в шкатулках!\n"
             + "Якубович: Шкатулки в студию!\n"
@@ -138,5 +134,42 @@ public class Yakubovich {
           + " если не согласны введите \"нет\" и нажмите Enter.");
     }
     return answer.equalsIgnoreCase("да");
+  }
+
+  public void askThreeLetters(Player finalist) {
+    System.out.printf("Якубович: %s назовите 3 буквы\n"
+        + "Вводите по одной букве и нажимайте Enter\n", finalist.getName());
+  }
+
+  public void speakOpenLetters() {
+    System.out.println("Якубович: откройте эти буквы в слове если они есть!");
+  }
+
+  public void askWordToPlaySuperGame(Player finalist) {
+    System.out.printf("Якубович: %s назовите слово!\n"
+        + "Введите слово и нажмите Enter\n", finalist.getName());
+  }
+
+  public void notWinnerSuperGame(Player finalist, String superPrize) {
+    System.out.println("Якубович: увы Вы не угадали слово!");
+    System.out.printf("Якубович: с Поля Чудес %s увозит:\n"
+            + "%s\n"
+            + "Деньги в сумме %d\n",
+        finalist.getName(), connectLinesWithCommas(finalist.getPrizes()),
+        finalist.getAmountWinningsBoxes());
+    System.out.printf("Якубович: %s в Супер Игре вы могли выиграть - %s\n",
+        finalist.getName(), superPrize);
+  }
+
+  public void winnerSuperGame(Player finalist, String superPrize) {
+    System.out.println("Якубович: Вы стали победителем Супер Игры в капитал шоу Поле чудес!");
+    System.out.printf("Якубович: с Поля Чудес %s увозит:\n"
+            + "%s\n"
+            + "Деньги в сумме %d\n",
+        finalist.getName(), connectLinesWithCommas(finalist.getPrizes()),
+        finalist.getAmountWinningsBoxes());
+    System.out.printf("Якубович: %s в Супер Игре Вы выиграли - %s\n"
+            + "Поздравляем Вас!!!\n",
+        finalist.getName(), superPrize);
   }
 }

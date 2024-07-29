@@ -1,5 +1,7 @@
 package org.javaacadmey.wonder_field;
 
+import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 import org.javaacadmey.wonder_field.drum.Drum;
 import org.javaacadmey.wonder_field.drum.DrumOptionsAdd;
@@ -11,7 +13,7 @@ public class Game {
   public static Scanner scanner = new Scanner(System.in);
 
   public static final int COUNT_PLAYERS = 3;
-  public static final int COUNT_ROUNDS = 4;
+  public static final int COUNT_ROUNDS = 5;
   public static final int COUNT_GROUP_ROUNDS = 3;
   public static final int INDEX_FINAL_ROUND = 3;
   public static final int INDEX_SUPER_GAME = 4;
@@ -22,7 +24,8 @@ public class Game {
   private Tableau tableau;
   private final Drum drum;
   private Player finalist;
-  private String[][] listPrize;
+  private final String[][] listPrize;
+  private final String[] listSuperPrizes;
 
   public Game() {
     questions = new String[COUNT_ROUNDS];
@@ -38,6 +41,13 @@ public class Game {
         {"Блендер", "400"},
         {"Чайник", "100"},
         {"Микроволновая печь", "500"}
+    };
+    listSuperPrizes = new String[]{
+        "Автомобиль",
+        "Квартира",
+        "Хомячок",
+        "Квадроцикл",
+        "Путешествие на двоих в Египет"
     };
   }
 
@@ -138,7 +148,7 @@ public class Game {
   private int playingWithBoxes(Player player) {
     Box box = new Box();
     int numberBox;
-    yakubovich.shoutPlayingWithBoxes(player.getName(), box);
+    yakubovich.shoutPlayingWithBoxes(player.getName());
     while (!(scanner.hasNextInt() && (numberBox = scanner.nextInt()) >= 1
         && numberBox <= Box.COUNT_BOX)) {
       scanner.nextLine();
@@ -191,17 +201,66 @@ public class Game {
   }
 
   private void playSuperGame() {
+    String superPrize;
+    String[] threeLetters = new String[3];
     selectPrize(finalist);
+    superPrize = listSuperPrizes[new Random().nextInt(listSuperPrizes.length + 1)];
     if (yakubovich.offersPlaySuperGame(finalist)) {
+      tableau = new Tableau(answers[INDEX_SUPER_GAME]);
+      yakubovich.askQuestion(questions[INDEX_SUPER_GAME]);
+      yakubovich.askThreeLetters(finalist);
+      for (int i = 0; i < threeLetters.length; i++) {
+        threeLetters[i] = finalist.shoutLetter();
+      }
+      yakubovich.speakOpenLetters();
+      for (String threeLetter : threeLetters) {
+        tableau.openLetter(threeLetter);
+      }
+      yakubovich.askWordToPlaySuperGame(finalist);
+      if (finalist.speakWord().equalsIgnoreCase(tableau.getRightAnswer())) {
+        tableau.openFullWord();
+        yakubovich.winnerSuperGame(finalist, superPrize);
+      } else {
+        yakubovich.notWinnerSuperGame(finalist, superPrize);
+      }
 
     } else {
-
+      yakubovich.notWinnerSuperGame(finalist, superPrize);
     }
   }
 
   private void selectPrize(Player finalist) {
+    int score = finalist.getScore();
+    int min = 100;
+    String[] selectPrizes = new String[0];
     yakubovich.speakCountScore(finalist);
+    for (int i = 0; i < listPrize.length; i++) {
+      System.out.printf("%d\t%s\t%s\n", i + 1, listPrize[i][0], listPrize[i][1]);
+    }
+    System.out.println(
+        "Выберите призы на количество ваших очков: введите номер приза и нажимайте Enter");
+    while (score > min) {
+      int index;
+      try {
+        if ((index = Integer.parseInt(scanner.nextLine())) < 1 || index > listPrize.length) {
+          throw new NumberFormatException();
+        }
 
+        int amount = Integer.parseInt(listPrize[index - 1][1]);
+
+        if (amount <= score) {
+          selectPrizes = Arrays.copyOf(selectPrizes, selectPrizes.length + 1);
+          selectPrizes[selectPrizes.length - 1] = listPrize[index - 1][0];
+          score -= amount;
+        } else {
+          System.out.println(
+              "У Вас не достаточно очков на данный приз, выберите другой приз и нажмите Enter");
+        }
+      } catch (NumberFormatException e) {
+        System.out.println("Не верный ввод! введите номер приза и нажимайте Enter");
+      }
+    }
+    finalist.setPrizes(selectPrizes);
   }
 
   public void start() {

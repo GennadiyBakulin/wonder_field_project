@@ -10,6 +10,7 @@ public class Player {
   private final String city;
   private int score;
   private int amountWinningsBoxes;
+  private String[] prizes;
 
   public Player(String name, String city) {
     this.name = name;
@@ -77,5 +78,13 @@ public class Player {
 
   public void setAmountWinningsBoxes(int amountWinningsBoxes) {
     this.amountWinningsBoxes += amountWinningsBoxes;
+  }
+
+  public String[] getPrizes() {
+    return prizes != null ? prizes : new String[]{"Вы не получили ни одного приза!"};
+  }
+
+  public void setPrizes(String[] prizes) {
+    this.prizes = prizes;
   }
 }

@@ -2,8 +2,8 @@ package org.javaacadmey.wonder_field;
 
 public class Tableau {
 
-  private String rightAnswer;
-  private boolean[] isOpenLettersOnTableau;
+  private final String rightAnswer;
+  private final boolean[] isOpenLettersOnTableau;
 
   public Tableau(String rightAnswer) {
     this.rightAnswer = rightAnswer;
