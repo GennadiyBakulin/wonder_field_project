@@ -102,44 +102,46 @@ public class Game {
   }
 
   public boolean moveOfPlayer(Player player) {
-    PlayerAnswer move;
+    int numberGuessingLettersInRow = 0;
     String rotationDrum;
-    int counterForGuessingThreeLettersInRow = 0;
+    PlayerAnswer playerAnswer;
+
     while (true) {
       System.out.printf("Ход игрока %s, %s\n", player.getName(), player.getCity());
       yakubovich.speakRotationDrum(player.getName());
       rotationDrum = drum.rotation();
+
       if (rotationDrum.equals(DrumOptionsAdd.SKIPPING_MOVE.toString())) {
         yakubovich.skippingMoveSector();
         return false;
       }
+
       if (rotationDrum.equals(DrumOptionsAdd.MULTIPLICATION_TWO.toString())) {
         yakubovich.multiplicationSector(player);
       } else {
         yakubovich.scoreSector(rotationDrum);
       }
-      move = player.move();
-      switch (move.getTypeResponse()) {
+
+      playerAnswer = player.move();
+
+      if (!yakubovich.isCheckResponsePlayer(playerAnswer, tableau)) {
+        return false;
+      }
+
+      player.setScore(rotationDrum);
+
+      switch (playerAnswer.getTypeResponse()) {
         case LETTER -> {
-          if (yakubovich.isCheckResponsePlayer(move, tableau)) {
-            player.setScore(rotationDrum);
-            if (++counterForGuessingThreeLettersInRow == 3) {
-              player.setAmountWinningsBoxes(playingWithBoxes(player));
-              counterForGuessingThreeLettersInRow = 0;
-            }
-            if (isTableauCompletelyFilled()) {
-              return true;
-            }
-          } else {
-            return false;
+          if (++numberGuessingLettersInRow == 3) {
+            player.setAmountWinningsMoneys(playingWithBoxes(player));
+            numberGuessingLettersInRow = 0;
+          }
+          if (isTableauCompletelyFilled()) {
+            return true;
           }
         }
         case WORD -> {
-          if (yakubovich.isCheckResponsePlayer(move, tableau)) {
-            player.setScore(rotationDrum);
-            return true;
-          }
-          return false;
+          return true;
         }
       }
     }
@@ -184,7 +186,7 @@ public class Game {
       Player[] players = createPlayers();
       tableau = new Tableau(answers[i - 1]);
       yakubovich.welcomeThreePlayers(players, i);
-      yakubovich.askQuestion(questions[i - 1]);
+      yakubovich.saysQuestion(questions[i - 1]);
       tableau.displayLettersOnTableau();
       playRound(players, i);
     }
@@ -195,7 +197,7 @@ public class Game {
     System.out.println("__________________________________");
     System.out.println("Финал игры Поле чудес!");
     yakubovich.welcomeThreePlayers(winners, INDEX_FINAL_ROUND + 1);
-    yakubovich.askQuestion(questions[INDEX_FINAL_ROUND]);
+    yakubovich.saysQuestion(questions[INDEX_FINAL_ROUND]);
     tableau.displayLettersOnTableau();
     playRound(winners, INDEX_FINAL_ROUND + 1);
   }
@@ -207,7 +209,7 @@ public class Game {
     superPrize = listSuperPrizes[new Random().nextInt(listSuperPrizes.length + 1)];
     if (yakubovich.offersPlaySuperGame(finalist)) {
       tableau = new Tableau(answers[INDEX_SUPER_GAME]);
-      yakubovich.askQuestion(questions[INDEX_SUPER_GAME]);
+      yakubovich.saysQuestion(questions[INDEX_SUPER_GAME]);
       yakubovich.askThreeLetters(finalist);
       for (int i = 0; i < threeLetters.length; i++) {
         threeLetters[i] = finalist.shoutLetter();
@@ -264,10 +266,10 @@ public class Game {
   }
 
   public void start() {
-    yakubovich.start();
+    yakubovich.welcomePublic();
     playGroupRounds();
     playFinalRound();
     playSuperGame();
-    yakubovich.end();
+    yakubovich.endGame();
   }
 }

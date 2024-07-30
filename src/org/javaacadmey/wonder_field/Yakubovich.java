@@ -5,26 +5,26 @@ import org.javaacadmey.wonder_field.player.PlayerAnswer;
 
 public class Yakubovich {
 
-  public void start() {
+  public void welcomePublic() {
     System.out.println(
         "Якубович: Здравствуйте, уважаемые дамы и господа! Пятница! В эфире капитал-шоу «Поле чудес»!");
   }
 
-  public void end() {
+  public void endGame() {
     System.out.println("Мы прощаемся с вами ровно на одну неделю! Здоровья вам, и до встречи!");
   }
 
   public void welcomeThreePlayers(Player[] players, int roundNumber) {
-    if (roundNumber < 4) {
+    if (roundNumber <= Game.COUNT_GROUP_ROUNDS) {
       System.out.printf("Якубович: приглашаю %d тройку игроков: %s\n", roundNumber,
-          connectLinesWithCommas(nameOfPlayers(players)));
+          joinStrings(nameOfPlayers(players)));
     } else {
       System.out.printf("Якубович: приглашаю победителей групповых этапов: %s\n",
-          connectLinesWithCommas(nameOfPlayers(players)));
+          joinStrings(nameOfPlayers(players)));
     }
   }
 
-  public void askQuestion(String question) {
+  public void saysQuestion(String question) {
     System.out.printf("Якубович: Внимание вопрос!\n%s\n", question);
   }
 
@@ -75,7 +75,7 @@ public class Yakubovich {
     return nameOfPlayers;
   }
 
-  public String connectLinesWithCommas(String[] array) {
+  public String joinStrings(String[] array) {
     return String.join(", ", array);
   }
 
@@ -155,7 +155,7 @@ public class Yakubovich {
     System.out.printf("Якубович: с Поля Чудес %s увозит:\n"
             + "%s\n"
             + "Деньги в сумме %d\n",
-        finalist.getName(), connectLinesWithCommas(finalist.getPrizes()),
+        finalist.getName(), joinStrings(finalist.getPrizes()),
         finalist.getAmountWinningsBoxes());
     System.out.printf("Якубович: %s в Супер Игре вы могли выиграть - %s\n",
         finalist.getName(), superPrize);
@@ -166,7 +166,7 @@ public class Yakubovich {
     System.out.printf("Якубович: с Поля Чудес %s увозит:\n"
             + "%s\n"
             + "Деньги в сумме %d\n",
-        finalist.getName(), connectLinesWithCommas(finalist.getPrizes()),
+        finalist.getName(), joinStrings(finalist.getPrizes()),
         finalist.getAmountWinningsBoxes());
     System.out.printf("Якубович: %s в Супер Игре Вы выиграли - %s\n"
             + "Поздравляем Вас!!!\n",

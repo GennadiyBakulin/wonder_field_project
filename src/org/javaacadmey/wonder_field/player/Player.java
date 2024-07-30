@@ -27,10 +27,10 @@ public class Player {
       System.out.println("Некорректное значение, введите 'б' или 'с'");
       input = Game.scanner.nextLine();
     }
-    if (input.equalsIgnoreCase("б")) {
-      return new PlayerAnswer(TypeResponse.LETTER, shoutLetter());
-    }
-    return new PlayerAnswer(TypeResponse.WORD, speakWord());
+
+    return input.equalsIgnoreCase("б")
+        ? new PlayerAnswer(TypeResponse.LETTER, shoutLetter())
+        : new PlayerAnswer(TypeResponse.WORD, speakWord());
   }
 
   public String shoutLetter() {
@@ -76,7 +76,7 @@ public class Player {
     return amountWinningsBoxes;
   }
 
-  public void setAmountWinningsBoxes(int amountWinningsBoxes) {
+  public void setAmountWinningsMoneys(int amountWinningsBoxes) {
     this.amountWinningsBoxes += amountWinningsBoxes;
   }
 
