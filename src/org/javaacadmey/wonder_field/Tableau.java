@@ -30,7 +30,6 @@ public class Tableau {
           isOpenLettersOnTableau[i] = true;
         }
       }
-      displayLettersOnTableau();
     }
   }
 

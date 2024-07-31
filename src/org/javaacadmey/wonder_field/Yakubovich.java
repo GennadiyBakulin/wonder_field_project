@@ -1,5 +1,6 @@
 package org.javaacadmey.wonder_field;
 
+import org.javaacadmey.wonder_field.drum.DrumAdditionalSectors;
 import org.javaacadmey.wonder_field.player.Player;
 import org.javaacadmey.wonder_field.player.PlayerAnswer;
 
@@ -17,10 +18,10 @@ public class Yakubovich {
   public void welcomeThreePlayers(Player[] players, int roundNumber) {
     if (roundNumber <= Game.COUNT_GROUP_ROUNDS) {
       System.out.printf("Якубович: приглашаю %d тройку игроков: %s\n", roundNumber,
-          joinStrings(nameOfPlayers(players)));
+          joinToString(nameOfPlayers(players)));
     } else {
       System.out.printf("Якубович: приглашаю победителей групповых этапов: %s\n",
-          joinStrings(nameOfPlayers(players)));
+          joinToString(nameOfPlayers(players)));
     }
   }
 
@@ -28,23 +29,14 @@ public class Yakubovich {
     System.out.printf("Якубович: Внимание вопрос!\n%s\n", question);
   }
 
-  public void shoutIfPlayerWins(Player player, boolean isFinallyRound) {
-    if (isFinallyRound) {
-      System.out.printf("Якубович: И перед нами победитель Капитал шоу поле чудес! Это %s из %s\n",
-          player.getName(), player.getCity());
-    } else {
-      System.out.printf("Якубович: Молодец! %s из %s проходит в финал!\n", player.getName(),
-          player.getCity());
-    }
-  }
-
-  public boolean isCheckResponsePlayer(PlayerAnswer answerPlayer, Tableau tableau) {
+  public boolean checkResponsePlayer(PlayerAnswer answerPlayer, Tableau tableau) {
     switch (answerPlayer.getTypeResponse()) {
       case LETTER -> {
         if (tableau.getRightAnswer().toUpperCase()
             .contains(answerPlayer.getResponse().toUpperCase())) {
           System.out.println("Якубович: Есть такая буква, откройте ее!");
           tableau.openLetter(answerPlayer.getResponse());
+          tableau.displayLettersOnTableau();
           System.out.println("__________________________________");
           return true;
         } else {
@@ -67,6 +59,16 @@ public class Yakubovich {
     return false;
   }
 
+  public void shoutIfPlayerWins(Player player, boolean isFinallyRound) {
+    if (isFinallyRound) {
+      System.out.printf("Якубович: И перед нами победитель Капитал шоу поле чудес! Это %s из %s\n",
+          player.getName(), player.getCity());
+    } else {
+      System.out.printf("Якубович: Молодец! %s из %s проходит в финал!\n", player.getName(),
+          player.getCity());
+    }
+  }
+
   public String[] nameOfPlayers(Player[] players) {
     String[] nameOfPlayers = new String[players.length];
     for (int i = 0; i < nameOfPlayers.length; i++) {
@@ -75,7 +77,7 @@ public class Yakubovich {
     return nameOfPlayers;
   }
 
-  public String joinStrings(String[] array) {
+  public String joinToString(String[] array) {
     return String.join(", ", array);
   }
 
@@ -83,18 +85,17 @@ public class Yakubovich {
     System.out.printf("Якубович: %s вращайте барабан!\n", name);
   }
 
-  public void skippingMoveSector() {
-    System.out.println("Якубович: на барабане сектор Пропуска хода! Следующий игрок!\n");
-  }
-
-  public void multiplicationSector(Player player) {
-    System.out.printf("Якубович: на барабане сектор умножения очков на 2!\n"
-            + "Якубович: у Вас %d очков в случае успешного ответа ваши очки удвоятся!\n",
-        player.getScore());
-  }
-
-  public void scoreSector(String score) {
-    System.out.printf("Якубович: на барабане %s очков! Ваш ответ!\n", score);
+  public boolean checkSectorOnDrum(String sector) {
+    if (sector.equals(DrumAdditionalSectors.SKIPPING_MOVE.toString())) {
+      System.out.println("Якубович: на барабане сектор Пропуска хода! Следующий игрок!\n");
+      return false;
+    } else if (sector.equals(DrumAdditionalSectors.MULTIPLICATION_TWO.toString())) {
+      System.out.println("Якубович: на барабане сектор умножения очков на 2!\n"
+          + "Якубович: в случае успешного ответа ваши очки удвоятся! Ваш ответ!");
+      return true;
+    }
+    System.out.printf("Якубович: на барабане %s очков! Ваш ответ!\n", sector);
+    return true;
   }
 
   public void shoutPlayingWithBoxes(String name) {
@@ -105,14 +106,14 @@ public class Yakubovich {
         Box.COUNT_BOX);
   }
 
-  public int checkBox(int numberBox, Box box) {
+  public boolean isCheckBox(int numberBox, Box box) {
     if (numberBox == box.getNumberMoneyBox()) {
       System.out.printf("Якубович: Поздравляю Вы верно выбрали шкатулку, ваш выигрыш составил %d\n",
           box.getAmountPrize());
-      return box.getAmountPrize();
+      return true;
     } else {
-      System.out.println("Якубович: Увы вы не отгадали шкатулку");
-      return 0;
+      System.out.println("Якубович: Увы эта шкатулка пустая!");
+      return false;
     }
   }
 
@@ -136,40 +137,50 @@ public class Yakubovich {
     return answer.equalsIgnoreCase("да");
   }
 
-  public void askThreeLetters(Player finalist) {
-    System.out.printf("Якубович: %s назовите 3 буквы\n"
-        + "Вводите по одной букве и нажимайте Enter\n", finalist.getName());
+  public void suggestsNamingThreeLetters() {
+    System.out.println("Якубович: назовите 3 буквы!\n"
+        + "Вводите по одной букве и нажимайте Enter");
   }
 
   public void speakOpenLetters() {
     System.out.println("Якубович: откройте эти буквы в слове если они есть!");
   }
 
-  public void askWordToPlaySuperGame(Player finalist) {
-    System.out.printf("Якубович: %s назовите слово!\n"
-        + "Введите слово и нажмите Enter\n", finalist.getName());
-  }
-
-  public void notWinnerSuperGame(Player finalist, String superPrize) {
-    System.out.println("Якубович: увы Вы не угадали слово!");
-    System.out.printf("Якубович: с Поля Чудес %s увозит:\n"
-            + "%s\n"
-            + "Деньги в сумме %d\n",
-        finalist.getName(), joinStrings(finalist.getPrizes()),
-        finalist.getAmountWinningsBoxes());
-    System.out.printf("Якубович: %s в Супер Игре вы могли выиграть - %s\n",
-        finalist.getName(), superPrize);
+  public void askWord() {
+    System.out.println("Якубович: назовите слово! (Введите слово и нажмите Enter)");
   }
 
   public void winnerSuperGame(Player finalist, String superPrize) {
     System.out.println("Якубович: Вы стали победителем Супер Игры в капитал шоу Поле чудес!");
-    System.out.printf("Якубович: с Поля Чудес %s увозит:\n"
-            + "%s\n"
-            + "Деньги в сумме %d\n",
-        finalist.getName(), joinStrings(finalist.getPrizes()),
-        finalist.getAmountWinningsBoxes());
+    showWinnings(finalist);
     System.out.printf("Якубович: %s в Супер Игре Вы выиграли - %s\n"
             + "Поздравляем Вас!!!\n",
         finalist.getName(), superPrize);
+  }
+
+  public void notWinnerSuperGame(Player finalist, String superPrize) {
+    System.out.println("Якубович: увы Вы не угадали слово!");
+    showWinnings(finalist);
+    System.out.printf("Якубович: %s в Супер Игре вы могли выиграть - %s\n",
+        finalist.getName(), superPrize);
+  }
+
+  public void showWinnings(Player finalist) {
+    System.out.printf("Якубович: с Поля Чудес %s увозит:\n"
+            + "%s\n"
+            + "Деньги в сумме %d\n",
+        finalist.getName(), joinToString(finalist.getPrizes()),
+        finalist.getAmountWinningsBoxes());
+  }
+
+  public boolean checkResponseSuperGame(String word, Tableau tableau) {
+    return word.equalsIgnoreCase(tableau.getRightAnswer());
+  }
+
+  public void notPlaySuperGame(Player finalist, String superPrize) {
+    System.out.println("Якубович: Это Ваше полное право!"
+        + "Для нас Вы все равно победитель капитал-шоу Поле чудес!");
+    showWinnings(finalist);
+    System.out.printf("Якубович: В Супер Игре вы могли выиграть - %s\n", superPrize);
   }
 }

@@ -14,8 +14,8 @@ public class Drum {
     for (int i = 100; i <= 1200; i += 100) {
       value.add(String.valueOf(i));
     }
-    value.add(DrumOptionsAdd.MULTIPLICATION_TWO.toString());
-    value.add(DrumOptionsAdd.SKIPPING_MOVE.toString());
+    value.add(DrumAdditionalSectors.MULTIPLICATION_TWO.toString());
+    value.add(DrumAdditionalSectors.SKIPPING_MOVE.toString());
   }
 
   public String rotation() {

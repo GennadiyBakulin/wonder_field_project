@@ -1,5 +1,5 @@
 package org.javaacadmey.wonder_field.drum;
 
-public enum DrumOptionsAdd {
+public enum DrumAdditionalSectors {
   MULTIPLICATION_TWO, SKIPPING_MOVE
 }

@@ -2,7 +2,7 @@ package org.javaacadmey.wonder_field.player;
 
 import java.util.regex.Pattern;
 import org.javaacadmey.wonder_field.Game;
-import org.javaacadmey.wonder_field.drum.DrumOptionsAdd;
+import org.javaacadmey.wonder_field.drum.DrumAdditionalSectors;
 
 public class Player {
 
@@ -37,7 +37,7 @@ public class Player {
     Pattern compile = Pattern.compile("[а-яА-ЯёЁ]");
     String letter = Game.scanner.nextLine();
 
-    while (letter.length() != 1 && !compile.matcher(letter).find()) {
+    while (letter.length() != 1 || !compile.matcher(letter).find()) {
       System.out.println("Ошибка! это не русская буква, введите русскую букву");
       letter = Game.scanner.nextLine();
     }
@@ -64,11 +64,11 @@ public class Player {
     return score;
   }
 
-  public void setScore(String rotation) {
-    if (rotation.equals(DrumOptionsAdd.MULTIPLICATION_TWO.toString())) {
+  public void setScore(String sector) {
+    if (sector.equals(DrumAdditionalSectors.MULTIPLICATION_TWO.toString())) {
       score *= 2;
     } else {
-      score += Integer.parseInt(rotation);
+      score += Integer.parseInt(sector);
     }
   }
 
@@ -86,5 +86,13 @@ public class Player {
 
   public void setPrizes(String[] prizes) {
     this.prizes = prizes;
+  }
+
+  public String[] namingThreeLetters() {
+    String[] letters = new String[3];
+    for (int i = 0; i < letters.length; i++) {
+      letters[i] = shoutLetter();
+    }
+    return letters;
   }
 }
