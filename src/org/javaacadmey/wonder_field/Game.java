@@ -6,6 +6,7 @@ import java.util.Scanner;
 import org.javaacadmey.wonder_field.drum.Drum;
 import org.javaacadmey.wonder_field.player.Player;
 import org.javaacadmey.wonder_field.player.PlayerAnswer;
+import org.javaacadmey.wonder_field.player.TypeResponse;
 
 public class Game {
 
@@ -79,11 +80,11 @@ public class Game {
     questions[2] = "Вопрос 3";
     questions[3] = "Вопрос 4";
     questions[4] = "Вопрос Суперигры";
-    answers[0] = "кошка";
-    answers[1] = "собака";
-    answers[2] = "елка";
+    answers[0] = "ёлка";
+    answers[1] = "казначей";
+    answers[2] = "кошка";
     answers[3] = "зверь";
-    answers[4] = "казначей";
+    answers[4] = "кролик";
   }
 
   public Player[] createPlayers() {
@@ -111,6 +112,11 @@ public class Game {
       }
 
       playerAnswer = player.move();
+
+      if (playerAnswer.getTypeResponse() == TypeResponse.LETTER
+          && yakubovich.checkLetterAlreadyOpen(playerAnswer, tableau)) {
+        continue;
+      }
 
       if (!yakubovich.checkResponsePlayer(playerAnswer, tableau)) {
         return false;

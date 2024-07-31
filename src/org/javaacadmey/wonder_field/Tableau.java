@@ -6,7 +6,10 @@ public class Tableau {
   private final boolean[] isOpenLettersOnTableau;
 
   public Tableau(String rightAnswer) {
-    this.rightAnswer = rightAnswer;
+    this.rightAnswer = rightAnswer
+        .toUpperCase()
+        .replaceAll("Ё", "Е")
+        .replaceAll("Й", "И");
     isOpenLettersOnTableau = new boolean[rightAnswer.length()];
   }
 
@@ -14,7 +17,7 @@ public class Tableau {
     if (isNotEmptyAttributes()) {
       for (int i = 0; i < isOpenLettersOnTableau.length; i++) {
         if (isOpenLettersOnTableau[i]) {
-          System.out.print(" " + String.valueOf(rightAnswer.charAt(i)).toUpperCase());
+          System.out.print(" " + rightAnswer.charAt(i));
         } else {
           System.out.print(" _");
         }
@@ -33,9 +36,20 @@ public class Tableau {
     }
   }
 
+  public boolean isLetterAlreadyOpen(String response) {
+    if (isNotEmptyAttributes()) {
+      for (int i = 0; i < rightAnswer.length(); i++) {
+        if (String.valueOf(rightAnswer.charAt(i)).equalsIgnoreCase(response)) {
+          return isOpenLettersOnTableau[i];
+        }
+      }
+    }
+    return false;
+  }
+
   public void openFullWord() {
     for (char letter : rightAnswer.toCharArray()) {
-      System.out.print(" " + String.valueOf(letter).toUpperCase());
+      System.out.print(" " + letter);
     }
     System.out.println(" ");
   }

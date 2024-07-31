@@ -42,7 +42,12 @@ public class Player {
       letter = Game.scanner.nextLine();
     }
     System.out.printf("Игрок %s: буква %s\n", name, letter);
-
+    if (letter.equalsIgnoreCase("Ё")) {
+      letter = "е";
+    }
+    if (letter.equalsIgnoreCase("Й")) {
+      letter = "и";
+    }
     return letter;
   }
 

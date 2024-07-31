@@ -29,10 +29,18 @@ public class Yakubovich {
     System.out.printf("Якубович: Внимание вопрос!\n%s\n", question);
   }
 
+  public boolean checkLetterAlreadyOpen(PlayerAnswer playerAnswer, Tableau tableau) {
+    if (tableau.isLetterAlreadyOpen(playerAnswer.getResponse())) {
+      System.out.println("Якубович: Такая буква уже открыта на табло, повторите выбор!");
+      return true;
+    }
+    return false;
+  }
+
   public boolean checkResponsePlayer(PlayerAnswer answerPlayer, Tableau tableau) {
     switch (answerPlayer.getTypeResponse()) {
       case LETTER -> {
-        if (tableau.getRightAnswer().toUpperCase()
+        if (tableau.getRightAnswer()
             .contains(answerPlayer.getResponse().toUpperCase())) {
           System.out.println("Якубович: Есть такая буква, откройте ее!");
           tableau.openLetter(answerPlayer.getResponse());
