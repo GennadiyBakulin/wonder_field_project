@@ -51,41 +51,41 @@ public class Game {
     };
   }
 
-//  public void init() {
-//    System.out.println(
-//        "Запуск игры \"Поле Чудес\" - подготовка к игре. Вам нужно ввести вопросы и ответы для игры.");
-//    for (int i = 0; i < COUNT_ROUNDS; i++) {
-//      System.out.printf("Введите вопрос #%d\n", i + 1);
-//      questions[i] = scanner.nextLine();
-//      System.out.printf("Введите ответ на вопрос #%d\n", i + 1);
-//      answers[i] = scanner.nextLine();
-//    }
-  //   System.out.println("Введите супервопрос");
-  // questions[INDEX_SUPER_GAME] = scanner.nextLine();
-  //      System.out.prinln("Введите ответ на супервопрос");
-//      answers[INDEX_SUPER_GAME] = scanner.nextLine();
-//    System.out.println("Иницализация закончена, игра начнется через 5 секунд");
-//    try {
-//      Thread.sleep(5000);
-//    } catch (InterruptedException e) {
-//      throw new RuntimeException(e);
-//    }
-//
-//    System.out.println("\n".repeat(50));
-//  }
-
   public void init() {
-    questions[0] = "Вопрос 1";
-    questions[1] = "Вопрос 2";
-    questions[2] = "Вопрос 3";
-    questions[3] = "Вопрос 4";
-    questions[4] = "Вопрос Суперигры";
-    answers[0] = "ёлка";
-    answers[1] = "казначей";
-    answers[2] = "кошка";
-    answers[3] = "зверь";
-    answers[4] = "кролик";
+    System.out.println(
+        "Запуск игры \"Поле Чудес\" - подготовка к игре. Вам нужно ввести вопросы и ответы для игры.");
+    for (int i = 0; i < COUNT_ROUNDS - 1; i++) {
+      System.out.printf("Введите вопрос #%d\n", i + 1);
+      questions[i] = scanner.nextLine();
+      System.out.printf("Введите ответ на вопрос #%d\n", i + 1);
+      answers[i] = scanner.nextLine();
+    }
+    System.out.println("Введите супервопрос");
+    questions[INDEX_SUPER_GAME] = scanner.nextLine();
+    System.out.println("Введите ответ на супервопрос");
+    answers[INDEX_SUPER_GAME] = scanner.nextLine();
+    System.out.println("Иницализация закончена, игра начнется через 5 секунд");
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+
+    System.out.println("\n".repeat(50));
   }
+
+//  public void init() {
+//    questions[0] = "Вопрос 1";
+//    questions[1] = "Вопрос 2";
+//    questions[2] = "Вопрос 3";
+//    questions[3] = "Вопрос 4";
+//    questions[4] = "Вопрос Суперигры";
+//    answers[0] = "ёлка";
+//    answers[1] = "казначей";
+//    answers[2] = "кошка";
+//    answers[3] = "зверь";
+//    answers[4] = "кролик";
+//  }
 
   public Player[] createPlayers() {
     Player[] players = new Player[COUNT_PLAYERS];

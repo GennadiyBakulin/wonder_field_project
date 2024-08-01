@@ -31,7 +31,7 @@ public class Yakubovich {
 
   public boolean checkLetterAlreadyOpen(PlayerAnswer playerAnswer, Tableau tableau) {
     if (tableau.isLetterAlreadyOpen(playerAnswer.getResponse())) {
-      System.out.println("Якубович: Такая буква уже открыта на табло, повторите выбор!");
+      System.out.println("Якубович: Такая буква уже открыта на табло, введите другую букву!");
       return true;
     }
     return false;
