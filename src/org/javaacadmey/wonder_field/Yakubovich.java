@@ -100,9 +100,9 @@ public class Yakubovich {
     } else if (sector.equals(DrumAdditionalSectors.MULTIPLICATION_TWO.toString())) {
       System.out.println("Якубович: на барабане сектор умножения очков на 2!\n"
           + "Якубович: в случае успешного ответа ваши очки удвоятся! Ваш ответ!");
-      return true;
+    } else {
+      System.out.printf("Якубович: на барабане %s очков! Ваш ответ!\n", sector);
     }
-    System.out.printf("Якубович: на барабане %s очков! Ваш ответ!\n", sector);
     return true;
   }
 
