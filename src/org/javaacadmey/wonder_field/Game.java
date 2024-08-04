@@ -12,12 +12,12 @@ import org.javaacadmey.wonder_field.player.TypeResponse;
 public class Game {
 
   public static Scanner scanner = new Scanner(System.in);
-
   public static final int COUNT_PLAYERS = 3;
   public static final int COUNT_ROUNDS = 5;
   public static final int COUNT_GROUP_ROUNDS = 3;
   public static final int INDEX_FINAL_ROUND = 3;
   public static final int INDEX_SUPER_GAME = 4;
+
   private final String[] questions = new String[COUNT_ROUNDS];
   private final String[] answers = new String[COUNT_ROUNDS];
   private final Player[] winners = new Player[COUNT_GROUP_ROUNDS];
@@ -34,13 +34,11 @@ public class Game {
       new Gift("Чайник", 100),
       new Gift("Микроволновая печь", 500)
   };
-
-  private final String[] listSuperPrizes = new String[]{
-      "Автомобиль",
-      "Квартира",
-      "Хомячок",
-      "Квадроцикл",
-      "Путешествие на двоих в Египет"
+  private final SuperPrize[] listSuperPrizes = new SuperPrize[]{
+      new SuperPrize("Автомобиль"),
+      new SuperPrize("Квартира"),
+      new SuperPrize("Хомячок"),
+      new SuperPrize("Путешествие на двоих в Египет")
   };
 
 //  public void init() {
@@ -81,24 +79,28 @@ public class Game {
 
   public Player[] createPlayers() {
     Player[] players = new Player[COUNT_PLAYERS];
+
     for (int i = 0; i < COUNT_PLAYERS; i++) {
       do {
         System.out.printf("Игрок №%s представьтесь: имя,город. Например: Иван,Москва\n", i + 1);
         String[] player = scanner.nextLine().split(",");
+
         if (player.length == 2 && !(player[0].isBlank() || player[1].isBlank())) {
           players[i] = new Player(player[0].trim(), player[1].trim());
           break;
         }
+
         System.out.println("Не верный ввод! Введите имя,город. Например: Иван,Москва");
       } while (true);
     }
+
     return players;
   }
 
   public boolean moveOfPlayer(Player player) {
     int countLettersGuessedPlayer = 0;
-    String sector;
     PlayerAnswer playerAnswer;
+    String sector;
 
     while (true) {
       System.out.printf("Ход игрока %s, %s\n", player.getName(), player.getCity());
@@ -128,6 +130,7 @@ public class Game {
             player.setAmountWinningsMoneys(playingWithBoxes(player));
             countLettersGuessedPlayer = 0;
           }
+
           if (isTableauFilled()) {
             return true;
           }
@@ -157,6 +160,7 @@ public class Game {
           yakubovich.shoutIfPlayerWins(player, true);
           finalist = player;
         }
+
         isEndOfRound = true;
         break;
       }
@@ -187,8 +191,9 @@ public class Game {
   }
 
   private void superGame() {
+    SuperPrize superPrize = listSuperPrizes[new Random().nextInt(listSuperPrizes.length)];
     selectPrize(finalist);
-    String superPrize = listSuperPrizes[new Random().nextInt(listSuperPrizes.length)];
+
     if (yakubovich.offersPlaySuperGame(finalist)) {
       playSuperGame(superPrize);
     } else {
@@ -196,18 +201,22 @@ public class Game {
     }
   }
 
-  private void playSuperGame(String superPrize) {
-    tableau = new Tableau(answers[INDEX_SUPER_GAME]);
+  private void playSuperGame(SuperPrize superPrize) {
     String[] threeLetters;
+    tableau = new Tableau(answers[INDEX_SUPER_GAME]);
+
     yakubovich.saysQuestion(questions[INDEX_SUPER_GAME]);
     yakubovich.suggestsNamingThreeLetters();
     threeLetters = finalist.namingThreeLetters();
     yakubovich.speakOpenLetters();
+
     for (String letter : threeLetters) {
       tableau.openLetter(letter);
     }
+
     tableau.displayLettersOnTableau();
     yakubovich.askWord();
+
     if (yakubovich.checkResponseSuperGame(finalist.speakWord(), tableau)) {
       tableau.openFullWord();
       yakubovich.winnerSuperGame(finalist, superPrize);
@@ -216,25 +225,18 @@ public class Game {
     }
   }
 
-  public void start() {
-    yakubovich.welcomePublic();
-    playGroupRounds();
-    playFinalRound();
-    superGame();
-    yakubovich.endGame();
-  }
-
   private void selectPrize(Player finalist) {
     int score = finalist.getScore();
+    int minPricePrize;
+
     Arrays.sort(gifts, (gift1, gift2) -> gift1.getPrice() - gift2.getPrice());
-    int minPricePrize = gifts[0].getPrice();
-    yakubovich.speakCountScore(finalist);
+    minPricePrize = gifts[0].getPrice();
 
     for (int i = 0; i < gifts.length; i++) {
       System.out.printf("%d\t%s\t%s\n", i + 1, gifts[i].getName(), gifts[i].getPrice());
     }
-    System.out.println(
-        "Выберите призы на количество ваших очков: вводите номер приза и нажимайте Enter");
+
+    yakubovich.speakCountScore(finalist);
 
     while (score >= minPricePrize) {
       int index;
@@ -243,7 +245,6 @@ public class Game {
         if ((index = scanner.nextInt()) < 1 || index > gifts.length) {
           throw new NoSuchElementException();
         }
-        scanner.nextLine();
 
         amount = gifts[index - 1].getPrice();
 
@@ -257,15 +258,17 @@ public class Game {
         }
       } catch (NoSuchElementException e) {
         System.out.println("Не верный ввод! вводите номер приза и нажимайте Enter");
-        scanner.nextLine();
       }
+      scanner.nextLine();
     }
   }
 
   public int playingWithBoxes(Player player) {
     Box box = new Box();
     int numberBox;
+
     yakubovich.shoutPlayingWithBoxes(player.getName());
+
     while (!(scanner.hasNextInt() && (numberBox = scanner.nextInt()) >= 1
         && numberBox <= Box.COUNT_BOX)) {
       scanner.nextLine();
@@ -273,10 +276,19 @@ public class Game {
           Box.COUNT_BOX);
     }
     scanner.nextLine();
+
     return yakubovich.isCheckBox(numberBox, box) ? box.getAmountPrize() : 0;
   }
 
   public boolean isTableauFilled() {
     return !tableau.isContainsUnknownLetters();
+  }
+
+  public void start() {
+    yakubovich.welcomePublic();
+    playGroupRounds();
+    playFinalRound();
+    superGame();
+    yakubovich.endGame();
   }
 }

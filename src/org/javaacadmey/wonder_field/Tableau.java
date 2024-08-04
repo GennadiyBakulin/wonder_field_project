@@ -3,20 +3,21 @@ package org.javaacadmey.wonder_field;
 public class Tableau {
 
   private final String rightAnswer;
-  private final boolean[] isOpenLettersOnTableau;
+  private final boolean[] openLettersOnTableau;
 
   public Tableau(String rightAnswer) {
     this.rightAnswer = rightAnswer
         .toUpperCase()
         .replaceAll("Ё", "Е")
         .replaceAll("Й", "И");
-    isOpenLettersOnTableau = new boolean[rightAnswer.length()];
+
+    openLettersOnTableau = new boolean[rightAnswer.length()];
   }
 
   public void displayLettersOnTableau() {
     if (isNotEmptyAttributes()) {
-      for (int i = 0; i < isOpenLettersOnTableau.length; i++) {
-        if (isOpenLettersOnTableau[i]) {
+      for (int i = 0; i < openLettersOnTableau.length; i++) {
+        if (openLettersOnTableau[i]) {
           System.out.print(" " + rightAnswer.charAt(i));
         } else {
           System.out.print(" _");
@@ -29,8 +30,8 @@ public class Tableau {
   public void openLetter(String letter) {
     if (isNotEmptyAttributes()) {
       for (int i = 0; i < rightAnswer.length(); i++) {
-        if (String.valueOf(rightAnswer.charAt(i)).equalsIgnoreCase(letter)) {
-          isOpenLettersOnTableau[i] = true;
+        if (String.valueOf(rightAnswer.charAt(i)).equals(letter)) {
+          openLettersOnTableau[i] = true;
         }
       }
     }
@@ -39,8 +40,8 @@ public class Tableau {
   public boolean isLetterAlreadyOpen(String response) {
     if (isNotEmptyAttributes()) {
       for (int i = 0; i < rightAnswer.length(); i++) {
-        if (String.valueOf(rightAnswer.charAt(i)).equalsIgnoreCase(response)) {
-          return isOpenLettersOnTableau[i];
+        if (String.valueOf(rightAnswer.charAt(i)).equals(response)) {
+          return openLettersOnTableau[i];
         }
       }
     }
@@ -55,8 +56,8 @@ public class Tableau {
   }
 
   public boolean isContainsUnknownLetters() {
-    for (boolean isLetter : isOpenLettersOnTableau) {
-      if (!isLetter) {
+    for (boolean letterOnTableau : openLettersOnTableau) {
+      if (!letterOnTableau) {
         return true;
       }
     }
@@ -64,8 +65,8 @@ public class Tableau {
   }
 
   public boolean isNotEmptyAttributes() {
-    return rightAnswer != null && isOpenLettersOnTableau != null && !rightAnswer.isBlank()
-        && isOpenLettersOnTableau.length != 0;
+    return rightAnswer != null && openLettersOnTableau != null && !rightAnswer.isBlank()
+        && openLettersOnTableau.length != 0;
   }
 
   public String getRightAnswer() {
