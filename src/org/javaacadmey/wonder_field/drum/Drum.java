@@ -1,24 +1,27 @@
 package org.javaacadmey.wonder_field.drum;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Drum {
 
-  private final List<String> value;
-
-
-  public Drum() {
-    value = new ArrayList<>();
-    for (int i = 100; i <= 1200; i += 100) {
-      value.add(String.valueOf(i));
-    }
-    value.add(DrumAdditionalSectors.MULTIPLICATION_TWO.toString());
-    value.add(DrumAdditionalSectors.SKIPPING_MOVE.toString());
-  }
+  private final String[] value = new String[]{
+      "100",
+      "200",
+      "300",
+      "400",
+      "500",
+      "600",
+      "700",
+      "800",
+      "900",
+      "1000",
+      "1100",
+      "1200",
+      DrumAdditionalSectors.MULTIPLICATION_TWO.toString(),
+      DrumAdditionalSectors.SKIPPING_MOVE.toString()
+  };
 
   public String rotation() {
-    return value.get(new Random().nextInt(value.size()));
+    return value[new Random().nextInt(value.length)];
   }
 }

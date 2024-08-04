@@ -1,6 +1,7 @@
 package org.javaacadmey.wonder_field;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
 import org.javaacadmey.wonder_field.drum.Drum;
@@ -17,82 +18,79 @@ public class Game {
   public static final int COUNT_GROUP_ROUNDS = 3;
   public static final int INDEX_FINAL_ROUND = 3;
   public static final int INDEX_SUPER_GAME = 4;
-  private final String[] questions;
-  private final String[] answers;
-  private final Player[] winners;
-  private final Yakubovich yakubovich;
+  private final String[] questions = new String[COUNT_ROUNDS];
+  private final String[] answers = new String[COUNT_ROUNDS];
+  private final Player[] winners = new Player[COUNT_GROUP_ROUNDS];
+  private final Yakubovich yakubovich = new Yakubovich();
   private Tableau tableau;
-  private final Drum drum;
+  private final Drum drum = new Drum();
   private Player finalist;
-  private final String[][] listPrize;
-  private final String[] listSuperPrizes;
+  private final Gift[] gifts = new Gift[]{
+      new Gift("Холодильник", 1000),
+      new Gift("Утюг", 300),
+      new Gift("Телевизор", 1200),
+      new Gift("Стиральная машина", 1000),
+      new Gift("Блендер", 400),
+      new Gift("Чайник", 100),
+      new Gift("Микроволновая печь", 500)
+  };
 
-  public Game() {
-    questions = new String[COUNT_ROUNDS];
-    answers = new String[COUNT_ROUNDS];
-    winners = new Player[COUNT_GROUP_ROUNDS];
-    yakubovich = new Yakubovich();
-    drum = new Drum();
-    listPrize = new String[][]{
-        {"Холодильник", "1000"},
-        {"Утюг", "300"},
-        {"Телевизор", "1200"},
-        {"Стиральная машина", "1000"},
-        {"Блендер", "400"},
-        {"Чайник", "100"},
-        {"Микроволновая печь", "500"}
-    };
-    listSuperPrizes = new String[]{
-        "Автомобиль",
-        "Квартира",
-        "Хомячок",
-        "Квадроцикл",
-        "Путешествие на двоих в Египет"
-    };
-  }
-
-  public void init() {
-    System.out.println(
-        "Запуск игры \"Поле Чудес\" - подготовка к игре. Вам нужно ввести вопросы и ответы для игры.");
-    for (int i = 0; i < COUNT_ROUNDS - 1; i++) {
-      System.out.printf("Введите вопрос #%d\n", i + 1);
-      questions[i] = scanner.nextLine();
-      System.out.printf("Введите ответ на вопрос #%d\n", i + 1);
-      answers[i] = scanner.nextLine();
-    }
-    System.out.println("Введите супервопрос");
-    questions[INDEX_SUPER_GAME] = scanner.nextLine();
-    System.out.println("Введите ответ на супервопрос");
-    answers[INDEX_SUPER_GAME] = scanner.nextLine();
-    System.out.println("Иницализация закончена, игра начнется через 5 секунд");
-    try {
-      Thread.sleep(5000);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-
-    System.out.println("\n".repeat(50));
-  }
+  private final String[] listSuperPrizes = new String[]{
+      "Автомобиль",
+      "Квартира",
+      "Хомячок",
+      "Квадроцикл",
+      "Путешествие на двоих в Египет"
+  };
 
 //  public void init() {
-//    questions[0] = "Вопрос 1";
-//    questions[1] = "Вопрос 2";
-//    questions[2] = "Вопрос 3";
-//    questions[3] = "Вопрос 4";
-//    questions[4] = "Вопрос Суперигры";
-//    answers[0] = "ёлка";
-//    answers[1] = "казначей";
-//    answers[2] = "кошка";
-//    answers[3] = "зверь";
-//    answers[4] = "кролик";
+//    System.out.println(
+//        "Запуск игры \"Поле Чудес\" - подготовка к игре. Вам нужно ввести вопросы и ответы для игры.");
+//    for (int i = 0; i < COUNT_ROUNDS - 1; i++) {
+//      System.out.printf("Введите вопрос #%d\n", i + 1);
+//      questions[i] = scanner.nextLine();
+//      System.out.printf("Введите ответ на вопрос #%d\n", i + 1);
+//      answers[i] = scanner.nextLine();
+//    }
+//    System.out.println("Введите супервопрос");
+//    questions[INDEX_SUPER_GAME] = scanner.nextLine();
+//    System.out.println("Введите ответ на супервопрос");
+//    answers[INDEX_SUPER_GAME] = scanner.nextLine();
+//    System.out.println("Иницализация закончена, игра начнется через 5 секунд");
+//    try {
+//      Thread.sleep(5000);
+//    } catch (InterruptedException e) {
+//      throw new RuntimeException(e);
+//    }
+//
+//    System.out.println("\n".repeat(50));
 //  }
+
+  public void init() {
+    questions[0] = "Вопрос 1";
+    questions[1] = "Вопрос 2";
+    questions[2] = "Вопрос 3";
+    questions[3] = "Вопрос 4";
+    questions[4] = "Вопрос Суперигры";
+    answers[0] = "ёлка";
+    answers[1] = "казначей";
+    answers[2] = "кошка";
+    answers[3] = "зверь";
+    answers[4] = "кролик";
+  }
 
   public Player[] createPlayers() {
     Player[] players = new Player[COUNT_PLAYERS];
     for (int i = 0; i < COUNT_PLAYERS; i++) {
-      System.out.printf("Игрок №%s представьтесь: имя,город. Например: Иван,Москва\n", i + 1);
-      String[] player = scanner.nextLine().split(",");
-      players[i] = new Player(player[0], player[1]);
+      do {
+        System.out.printf("Игрок №%s представьтесь: имя,город. Например: Иван,Москва\n", i + 1);
+        String[] player = scanner.nextLine().split(",");
+        if (player.length == 2 && !(player[0].isBlank() || player[1].isBlank())) {
+          players[i] = new Player(player[0].trim(), player[1].trim());
+          break;
+        }
+        System.out.println("Не верный ввод! Введите имя,город. Например: Иван,Москва");
+      } while (true);
     }
     return players;
   }
@@ -143,19 +141,24 @@ public class Game {
 
   public void playRound(Player[] players, int numberRound) {
     boolean isEndOfRound = false;
+
     while (!isEndOfRound) {
+
       for (Player player : players) {
-        if (moveOfPlayer(player)) {
-          if (numberRound - 1 < INDEX_FINAL_ROUND) {
-            yakubovich.shoutIfPlayerWins(player, false);
-            winners[numberRound - 1] = player;
-          } else {
-            yakubovich.shoutIfPlayerWins(player, true);
-            finalist = player;
-          }
-          isEndOfRound = true;
-          break;
+
+        if (!moveOfPlayer(player)) {
+          continue;
         }
+
+        if (numberRound - 1 < INDEX_FINAL_ROUND) {
+          yakubovich.shoutIfPlayerWins(player, false);
+          winners[numberRound - 1] = player;
+        } else {
+          yakubovich.shoutIfPlayerWins(player, true);
+          finalist = player;
+        }
+        isEndOfRound = true;
+        break;
       }
     }
   }
@@ -222,45 +225,44 @@ public class Game {
   }
 
   private void selectPrize(Player finalist) {
-    String[] selectPrizes = new String[0];
     int score = finalist.getScore();
-    int minimumPricePrize = Integer.parseInt(listPrize[0][1]);
-
+    Arrays.sort(gifts, (gift1, gift2) -> gift1.getPrice() - gift2.getPrice());
+    int minPricePrize = gifts[0].getPrice();
     yakubovich.speakCountScore(finalist);
-    for (int i = 0; i < listPrize.length; i++) {
-      if (minimumPricePrize > Integer.parseInt(listPrize[i][1])) {
-        minimumPricePrize = Integer.parseInt(listPrize[i][1]);
-      }
-      System.out.printf("%d\t%s\t%s\n", i + 1, listPrize[i][0], listPrize[i][1]);
+
+    for (int i = 0; i < gifts.length; i++) {
+      System.out.printf("%d\t%s\t%s\n", i + 1, gifts[i].getName(), gifts[i].getPrice());
     }
     System.out.println(
         "Выберите призы на количество ваших очков: вводите номер приза и нажимайте Enter");
-    while (score >= minimumPricePrize) {
-      int index;
-      try {
-        if ((index = Integer.parseInt(scanner.nextLine())) < 1 || index > listPrize.length) {
-          throw new NumberFormatException();
-        }
 
-        int amount = Integer.parseInt(listPrize[index - 1][1]);
+    while (score >= minPricePrize) {
+      int index;
+      int amount;
+      try {
+        if ((index = scanner.nextInt()) < 1 || index > gifts.length) {
+          throw new NoSuchElementException();
+        }
+        scanner.nextLine();
+
+        amount = gifts[index - 1].getPrice();
 
         if (amount <= score) {
-          selectPrizes = Arrays.copyOf(selectPrizes, selectPrizes.length + 1);
-          selectPrizes[selectPrizes.length - 1] = listPrize[index - 1][0];
+          finalist.addGift(gifts[index - 1]);
           score -= amount;
           System.out.println("Осталось" + score + "очков");
         } else {
           System.out.println(
               "У Вас не достаточно очков на данный приз, выберите другой приз и нажмите Enter");
         }
-      } catch (NumberFormatException e) {
+      } catch (NoSuchElementException e) {
         System.out.println("Не верный ввод! вводите номер приза и нажимайте Enter");
+        scanner.nextLine();
       }
     }
-    finalist.setPrizes(selectPrizes);
   }
 
-  private int playingWithBoxes(Player player) {
+  public int playingWithBoxes(Player player) {
     Box box = new Box();
     int numberBox;
     yakubovich.shoutPlayingWithBoxes(player.getName());
@@ -270,6 +272,7 @@ public class Game {
       System.out.printf("Не верный ввод! Введите число от 1 до %d и нажмите Enter\n",
           Box.COUNT_BOX);
     }
+    scanner.nextLine();
     return yakubovich.isCheckBox(numberBox, box) ? box.getAmountPrize() : 0;
   }
 

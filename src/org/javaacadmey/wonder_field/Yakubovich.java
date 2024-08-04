@@ -1,5 +1,6 @@
 package org.javaacadmey.wonder_field;
 
+import java.util.Arrays;
 import org.javaacadmey.wonder_field.drum.DrumAdditionalSectors;
 import org.javaacadmey.wonder_field.player.Player;
 import org.javaacadmey.wonder_field.player.PlayerAnswer;
@@ -52,7 +53,7 @@ public class Yakubovich {
         }
       }
       case WORD -> {
-        if (tableau.getRightAnswer().equalsIgnoreCase(answerPlayer.getResponse())) {
+        if (tableau.getRightAnswer().equals(answerPlayer.getResponse())) {
           System.out.printf("Якубович: %s! Абсолютно верно!\n", answerPlayer.getResponse());
           tableau.openFullWord();
           System.out.println("__________________________________");
@@ -174,11 +175,17 @@ public class Yakubovich {
   }
 
   public void showWinnings(Player finalist) {
+    String[] listGifts = new String[0];
+    for (Gift gift : finalist.getGifts()) {
+      listGifts = Arrays.copyOf(listGifts, listGifts.length + 1);
+      listGifts[listGifts.length - 1] = gift.getName();
+    }
     System.out.printf("Якубович: с Поля Чудес %s увозит:\n"
-            + "%s\n"
-            + "Деньги в сумме %d\n",
-        finalist.getName(), joinToString(finalist.getPrizes()),
-        finalist.getAmountWinningsBoxes());
+            + "Деньги в сумме %d\n"
+            + "%s\n",
+        finalist.getName(),
+        finalist.getAmountWinningsBoxes(),
+        listGifts.length > 0 ? joinToString(listGifts) : "");
   }
 
   public boolean checkResponseSuperGame(String word, Tableau tableau) {

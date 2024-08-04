@@ -1,7 +1,9 @@
 package org.javaacadmey.wonder_field.player;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 import org.javaacadmey.wonder_field.Game;
+import org.javaacadmey.wonder_field.Gift;
 import org.javaacadmey.wonder_field.drum.DrumAdditionalSectors;
 
 public class Player {
@@ -10,7 +12,7 @@ public class Player {
   private final String city;
   private int score;
   private int amountWinningsBoxes;
-  private String[] prizes;
+  private Gift[] gifts = new Gift[0];
 
   public Player(String name, String city) {
     this.name = name;
@@ -54,7 +56,9 @@ public class Player {
   public String speakWord() {
     String word = Game.scanner.nextLine();
     System.out.printf("Игрок %s: слово %s\n", name, word);
-    return word;
+    return word.toUpperCase()
+        .replaceAll("Ё", "Е")
+        .replaceAll("Й", "И");
   }
 
   public String getName() {
@@ -85,12 +89,14 @@ public class Player {
     this.amountWinningsBoxes += amountWinningsBoxes;
   }
 
-  public String[] getPrizes() {
-    return prizes != null ? prizes : new String[]{"Вы не получили ни одного приза!"};
+  public Gift[] getGifts() {
+
+    return gifts;
   }
 
-  public void setPrizes(String[] prizes) {
-    this.prizes = prizes;
+  public void addGift(Gift gift) {
+    gifts = Arrays.copyOf(gifts, gifts.length + 1);
+    gifts[gifts.length - 1] = gift;
   }
 
   public String[] namingThreeLetters() {
